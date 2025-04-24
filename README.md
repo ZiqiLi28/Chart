@@ -5,6 +5,6 @@
 
 • Forecasting prospects can be implemented based on the information entered into the application. For example, electricity consumption and based on that, predicting monthly consumption
 
-• The application can study, for example, the correlation of diAerent data and present information to the user 
+• The application can study, for example, the correlation of different data and present information to the user
 
 • Data collection and analysis for application maintenance/operation. For example, response times, time spent by the user in the application, number of new users on a daily, weekly, monthly basis, etc
