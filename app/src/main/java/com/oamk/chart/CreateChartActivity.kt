@@ -1,5 +1,6 @@
 package com.oamk.chart
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -10,6 +11,7 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -35,13 +37,16 @@ class CreateChartActivity : ComponentActivity() {
 @Composable
 fun CreateChartScreen(chartType: String) {
     var title by remember { mutableStateOf(TextFieldValue("")) }
-    var columns by remember {
-        mutableStateOf(
-            listOf(
-                Pair(TextFieldValue(""), TextFieldValue(""))
+    val columns = remember {
+        mutableStateListOf(
+            Pair(
+                mutableStateOf(TextFieldValue("")),
+                mutableStateOf(TextFieldValue(""))
             )
         )
     }
+
+    val context = LocalContext.current
 
     Column(
         modifier = Modifier
@@ -70,11 +75,9 @@ fun CreateChartScreen(chartType: String) {
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
                 OutlinedTextField(
-                    value = pair.first,
-                    onValueChange = {
-                        columns = columns.toMutableList().also {
-                            it[index] = it[index].copy(first = it)
-                        }
+                    value = pair.first.value,
+                    onValueChange = { newValue ->
+                        pair.first.value = newValue
                     },
                     label = { Text("X${index + 1}") },
                     modifier = Modifier
@@ -82,11 +85,9 @@ fun CreateChartScreen(chartType: String) {
                         .padding(end = 8.dp)
                 )
                 OutlinedTextField(
-                    value = pair.second,
-                    onValueChange = {
-                        columns = columns.toMutableList().also {
-                            it[index] = it[index].copy(second = it)
-                        }
+                    value = pair.second.value,
+                    onValueChange = { newValue ->
+                        pair.second.value = newValue
                     },
                     label = { Text("Y${index + 1}") },
                     modifier = Modifier.weight(1f)
@@ -96,7 +97,12 @@ fun CreateChartScreen(chartType: String) {
 
         Button(
             onClick = {
-                columns = columns + Pair(TextFieldValue(""), TextFieldValue(""))
+                columns.add(
+                    Pair(
+                        mutableStateOf(TextFieldValue("")),
+                        mutableStateOf(TextFieldValue(""))
+                    )
+                )
             },
             modifier = Modifier.align(Alignment.End)
         ) {
@@ -105,10 +111,8 @@ fun CreateChartScreen(chartType: String) {
 
         Button(
             onClick = {
-                val context = LocalContext.current
-
-                val xLabels = columns.map { it.first.text }
-                val yLabels = columns.map { it.second.text }
+                val xLabels = columns.map { it.first.value.text }
+                val yLabels = columns.map { it.second.value.text }
 
                 val intent = Intent(context, ChartDisplayActivity::class.java).apply {
                     putExtra("CHART_TITLE", title.text)

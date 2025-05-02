@@ -1,16 +1,20 @@
 package com.oamk.chart
 
+import android.os.Bundle
+import androidx.activity.ComponentActivity
+import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.*
-import androidx.compose.material3.*
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.github.mikephil.charting.charts.*
-import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.data.*
-import com.github.mikephil.charting.utils.ColorTemplate
-import androidx.compose.ui.viewinterop.AndroidView
+import com.github.mikephil.charting.formatter.IndexAxisValueFormatter
 import com.oamk.chart.ui.theme.ChartTheme
+import androidx.compose.ui.viewinterop.AndroidView
+import com.github.mikephil.charting.utils.ColorTemplate
 
 class ChartDisplayActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
