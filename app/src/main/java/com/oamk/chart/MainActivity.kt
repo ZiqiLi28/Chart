@@ -44,7 +44,6 @@ fun MainScreen(onChartSelected: (String) -> Unit) {
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text(text = "Select a Chart Type", fontSize = 24.sp)
-        ChartButton(text = "Histogram", onClick = { onChartSelected("Histogram") })
         ChartButton(text = "Bar Chart", onClick = { onChartSelected("BarChart") })
         ChartButton(text = "Pie Chart", onClick = { onChartSelected("PieChart") })
         ChartButton(text = "Line Chart", onClick = { onChartSelected("LineChart") })
