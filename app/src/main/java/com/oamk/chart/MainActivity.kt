@@ -12,15 +12,20 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.view.WindowCompat
 import com.oamk.chart.ui.theme.ChartTheme
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        // Ensures that the system UI does not overlay the content
+        WindowCompat.setDecorFitsSystemWindows(window, false)
         setContent {
             ChartTheme {
                 Surface(
-                    modifier = Modifier.fillMaxSize(),
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(WindowInsets.safeDrawing.asPaddingValues()),
                     color = MaterialTheme.colorScheme.background
                 ) {
                     MainScreen(onChartSelected = { chartType ->
@@ -44,8 +49,9 @@ fun MainScreen(onChartSelected: (String) -> Unit) {
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text(text = "Select a Chart Type", fontSize = 24.sp)
+        // Button for selecting Bar Chart
         ChartButton(text = "Bar Chart", onClick = { onChartSelected("BarChart") })
-        ChartButton(text = "Pie Chart", onClick = { onChartSelected("PieChart") })
+        // Button for selecting Line Chart
         ChartButton(text = "Line Chart", onClick = { onChartSelected("LineChart") })
     }
 }

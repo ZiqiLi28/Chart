@@ -12,6 +12,8 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Chart"
         tools:targetApi="31">
+        <activity android:name=".ChartDisplayActivity" />
+        <activity android:name=".CreateChartActivity" />
         <activity
             android:name=".MainActivity"
             android:exported="true"

@@ -15,16 +15,21 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.view.WindowCompat
 import com.oamk.chart.ui.theme.ChartTheme
 
 class CreateChartActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        // Ensures that the system UI does not overlay the content
+        WindowCompat.setDecorFitsSystemWindows(window, false)
         val chartType = intent.getStringExtra("CHART_TYPE") ?: "Unknown"
         setContent {
             ChartTheme {
                 Surface(
-                    modifier = Modifier.fillMaxSize(),
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(WindowInsets.safeDrawing.asPaddingValues()),
                     color = MaterialTheme.colorScheme.background
                 ) {
                     CreateChartScreen(chartType)
@@ -37,6 +42,7 @@ class CreateChartActivity : ComponentActivity() {
 @Composable
 fun CreateChartScreen(chartType: String) {
     var title by remember { mutableStateOf(TextFieldValue("")) }
+    // State list for the columns, each column has X and Y values
     val columns = remember {
         mutableStateListOf(
             Pair(
@@ -46,6 +52,7 @@ fun CreateChartScreen(chartType: String) {
         )
     }
 
+    // Get the current context to start new activities
     val context = LocalContext.current
 
     Column(
@@ -64,15 +71,18 @@ fun CreateChartScreen(chartType: String) {
             modifier = Modifier.fillMaxWidth()
         )
 
+        // Display labels for X and Y axis
         Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
             Text("X Label", fontSize = 16.sp, modifier = Modifier.weight(1f))
             Text("Y Label", fontSize = 16.sp, modifier = Modifier.weight(1f))
         }
 
+        // Loop through each column, displaying a pair of X and Y label input fields
         columns.forEachIndexed { index, pair ->
             Row(
                 modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
             ) {
                 OutlinedTextField(
                     value = pair.first.value,
@@ -92,6 +102,15 @@ fun CreateChartScreen(chartType: String) {
                     label = { Text("Y${index + 1}") },
                     modifier = Modifier.weight(1f)
                 )
+                // Delete button
+                if (columns.size > 1) {
+                    Button(
+                        onClick = { columns.removeAt(index) },
+                        modifier = Modifier.padding(start = 8.dp)
+                    ) {
+                        Text("Delete")
+                    }
+                }
             }
         }
 
@@ -109,6 +128,7 @@ fun CreateChartScreen(chartType: String) {
             Text("+ Add Column")
         }
 
+        // Button to add a new column
         Button(
             onClick = {
                 val xLabels = columns.map { it.first.value.text }
