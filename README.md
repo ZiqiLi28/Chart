@@ -8,3 +8,5 @@
 • The application can study, for example, the correlation of different data and present information to the user
 
 • Data collection and analysis for application maintenance/operation. For example, response times, time spent by the user in the application, number of new users on a daily, weekly, monthly basis, etc
+
+The libraries used: https://www.patrykandpatrick.com/vico/guide/stable
