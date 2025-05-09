@@ -1,3 +1,5 @@
+// First page for users choose chart
+
 package com.oamk.chart
 
 import android.content.Intent
@@ -14,6 +16,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.view.WindowCompat
 import com.oamk.chart.ui.theme.ChartTheme
+
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -49,10 +52,12 @@ fun MainScreen(onChartSelected: (String) -> Unit) {
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text(text = "Select a Chart Type", fontSize = 24.sp)
-        // Button for selecting Bar Chart
+        // Button for selecting bar chart
         ChartButton(text = "Bar Chart", onClick = { onChartSelected("BarChart") })
-        // Button for selecting Line Chart
+        // Button for selecting line chart
         ChartButton(text = "Line Chart", onClick = { onChartSelected("LineChart") })
+        // Button for positive negative bar chart
+        ChartButton(text = "Pos‑Neg Bar Chart", onClick = { onChartSelected("PosNegBarChart") })
     }
 }
 

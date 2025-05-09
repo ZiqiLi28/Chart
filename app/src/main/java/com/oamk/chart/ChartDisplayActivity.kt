@@ -1,3 +1,5 @@
+//Display Bar chart and line chart
+
 package com.oamk.chart
 
 import android.os.Bundle
