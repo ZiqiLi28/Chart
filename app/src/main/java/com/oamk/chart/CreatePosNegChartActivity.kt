@@ -18,15 +18,22 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.view.WindowCompat
 import com.oamk.chart.ui.theme.ChartTheme
 
 class CreatePosNegChartActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        // Ensures that the system UI does not overlay the content
+        WindowCompat.setDecorFitsSystemWindows(window, false)
         setContent {
             ChartTheme {
-                Surface(modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colorScheme.background) {
+                Surface(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(WindowInsets.safeDrawing.asPaddingValues()),
+                    color = MaterialTheme.colorScheme.background
+                ) {
                     CreatePosNegChartScreen()
                 }
             }
@@ -37,7 +44,6 @@ class CreatePosNegChartActivity : ComponentActivity() {
 @Composable
 fun CreatePosNegChartScreen() {
     var title by remember { mutableStateOf(TextFieldValue("")) }
-    var pivot by remember { mutableStateOf(TextFieldValue("0")) }
     val columns = remember {
         mutableStateListOf(
             Pair(mutableStateOf(TextFieldValue("")), mutableStateOf(TextFieldValue("")))
@@ -56,10 +62,6 @@ fun CreatePosNegChartScreen() {
         OutlinedTextField(
             value = title, onValueChange = { title = it },
             label = { Text("Chart Title") }, modifier = Modifier.fillMaxWidth()
-        )
-        OutlinedTextField(
-            value = pivot, onValueChange = { pivot = it },
-            label = { Text("Pivot Value") }, modifier = Modifier.fillMaxWidth()
         )
 
         Spacer(Modifier.height(8.dp))
@@ -83,14 +85,15 @@ fun CreatePosNegChartScreen() {
                     modifier = Modifier.weight(1f)
                 )
                 if (columns.size > 1) {
-                    TextButton(onClick = { columns.removeAt(idx) }) {
-                        Text("Delete")
-                    }
+                    Button(
+                        onClick = { columns.removeAt(idx) },
+                        modifier = Modifier.padding(start = 8.dp)
+                    ){Text("Delete")}
                 }
             }
         }
 
-        TextButton(onClick = {
+        Button(onClick = {
             columns.add(
                 Pair(mutableStateOf(TextFieldValue("")),
                     mutableStateOf(TextFieldValue("")))
@@ -100,11 +103,7 @@ fun CreatePosNegChartScreen() {
         }
 
         Button(onClick = {
-            val pivotValue = pivot.text.toFloatOrNull()
-            if (pivotValue == null) {
-                Toast.makeText(context, "Enter valid pivot", Toast.LENGTH_SHORT).show()
-                return@Button
-            }
+            val pivotValue = 0f
             val xLabels = columns.map { it.first.value.text }
             val yRaw = columns.map { it.second.value.text.toFloatOrNull() }
             if (yRaw.any { it == null }) {

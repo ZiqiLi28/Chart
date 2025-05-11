@@ -29,17 +29,18 @@ import com.patrykandpatrick.vico.multiplatform.cartesian.*
 class PosNegChartDisplayActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        // Ensures that the system UI does not overlay the content
         WindowCompat.setDecorFitsSystemWindows(window, false)
-
         val chartTitle = intent.getStringExtra("CHART_TITLE") ?: ""
         val xLabels = intent.getStringArrayListExtra("X_LABELS") ?: arrayListOf()
         val yAdjusted = intent.getFloatArrayExtra("Y_ADJUSTED")?.toList() ?: emptyList()
 
         setContent {
             ChartTheme {
-                Surface(modifier = Modifier
-                    .fillMaxSize()
-                    .padding(WindowInsets.safeDrawing.asPaddingValues()),
+                Surface(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(WindowInsets.safeDrawing.asPaddingValues()),
                     color = MaterialTheme.colorScheme.background
                 ) {
                     PosNegChartScreen(chartTitle, xLabels, yAdjusted)

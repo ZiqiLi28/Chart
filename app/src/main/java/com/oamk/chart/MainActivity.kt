@@ -23,6 +23,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         // Ensures that the system UI does not overlay the content
         WindowCompat.setDecorFitsSystemWindows(window, false)
+
         setContent {
             ChartTheme {
                 Surface(
@@ -32,8 +33,14 @@ class MainActivity : ComponentActivity() {
                     color = MaterialTheme.colorScheme.background
                 ) {
                     MainScreen(onChartSelected = { chartType ->
-                        val intent = Intent(this, CreateBarLineChartActivity::class.java)
-                        intent.putExtra("CHART_TYPE", chartType)
+                        val intent = when (chartType) {
+                            "PosNegBarChart" ->
+                                Intent(this, CreatePosNegChartActivity::class.java)
+                            else ->
+                                Intent(this, CreateBarLineChartActivity::class.java).apply {
+                                    putExtra("CHART_TYPE", chartType)
+                                }
+                        }
                         startActivity(intent)
                     })
                 }
