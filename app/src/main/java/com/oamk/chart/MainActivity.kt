@@ -34,14 +34,14 @@ class MainActivity : ComponentActivity() {
                 ) {
                     MainScreen(onChartSelected = { chartType ->
                         val intent = when (chartType) {
-                            "PosNegBarChart" ->
-                                Intent(this, CreatePosNegChartActivity::class.java)
-                            else ->
-                                Intent(this, CreateBarLineChartActivity::class.java).apply {
-                                    putExtra("CHART_TYPE", chartType)
-                                }
+                            "ScatterPlot" -> Intent(this, CreateScatterPlotActivity::class.java)
+                            "PosNegBarChart" -> Intent(this, CreatePosNegChartActivity::class.java)
+                            "BarChart", "LineChart" -> Intent(this, CreateBarLineChartActivity::class.java).apply {
+                                putExtra("CHART_TYPE", chartType)
+                            }
+                            else -> null
                         }
-                        startActivity(intent)
+                        intent?.let { startActivity(it) }
                     })
                 }
             }
@@ -65,6 +65,8 @@ fun MainScreen(onChartSelected: (String) -> Unit) {
         ChartButton(text = "Line Chart", onClick = { onChartSelected("LineChart") })
         // Button for positive negative bar chart
         ChartButton(text = "Pos‑Neg Bar Chart", onClick = { onChartSelected("PosNegBarChart") })
+        // Button for Scatter Plot
+        ChartButton(text = "Scatter Plot", onClick = { onChartSelected("ScatterPlot") })
     }
 }
 
