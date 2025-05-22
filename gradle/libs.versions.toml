@@ -7,7 +7,7 @@ junitVersion = "1.2.1"
 espressoCore = "3.6.1"
 lifecycleRuntimeKtx = "2.9.0"
 activityCompose = "1.10.1"
-composeBom = "2025.05.00"
+composeBom = "2025.05.01"
 mpandroidchart = "v3.1.0"
 vico = "2.1.2"
 
@@ -31,8 +31,6 @@ vico-compose = { group = "com.patrykandpatrick.vico", name = "compose", version.
 vico-compose-m2 = { group = "com.patrykandpatrick.vico", name = "compose-m2", version.ref = "vico" }
 vico-compose-m3 = { group = "com.patrykandpatrick.vico", name = "compose-m3", version.ref = "vico" }
 vico-multiplatform = { group = "com.patrykandpatrick.vico", name = "multiplatform", version.ref = "vico" }
-vico-multiplatform-m2 = { group = "com.patrykandpatrick.vico", name = "multiplatform-m2", version.ref = "vico" }
-vico-multiplatform-m3 = { group = "com.patrykandpatrick.vico", name = "multiplatform-m3", version.ref = "vico" }
 vico-views = { group = "com.patrykandpatrick.vico", name = "views", version.ref = "vico" }
 
 [plugins]

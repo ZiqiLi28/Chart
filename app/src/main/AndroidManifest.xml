@@ -16,6 +16,8 @@
         <activity android:name=".BarLineChartDisplayActivity"/>
         <activity android:name=".CreatePosNegChartActivity"/>
         <activity android:name=".PosNegChartDisplayActivity"/>
+        <activity android:name=".CreateScatterPlotActivity" />
+        <activity android:name=".ScatterPlotDisplayActivity" />
         <activity
             android:name=".MainActivity"
             android:exported="true"

@@ -17,7 +17,6 @@ import androidx.compose.ui.unit.sp
 import androidx.core.view.WindowCompat
 import com.oamk.chart.ui.theme.ChartTheme
 
-
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
