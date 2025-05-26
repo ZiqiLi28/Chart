@@ -1,5 +1,6 @@
 package com.oamk.chart
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -10,10 +11,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.nativeCanvas
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.view.WindowCompat
 import com.oamk.chart.ui.theme.ChartTheme
+import java.util.Locale
+import androidx.compose.ui.Alignment
 
 class ScatterPlotDisplayActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -39,6 +43,7 @@ class ScatterPlotDisplayActivity : ComponentActivity() {
     }
 }
 
+@SuppressLint("DefaultLocale")
 @Composable
 fun ScatterPlotWithRegression(
     title: String,
@@ -74,9 +79,64 @@ fun ScatterPlotWithRegression(
             val h = size.height
 
             fun mapX(x: Float) = (x - xMin) / (xMax - xMin) * w
-            fun mapY(y: Float) = h - ( (y - yMin) / (yMax - yMin) * h )
+            fun mapY(y: Float) = h - ((y - yMin) / (yMax - yMin) * h)
 
-            // draw points
+            drawLine(
+                color = Color.Black,
+                start = Offset(0f, h),
+                end = Offset(w, h),
+                strokeWidth = 2f
+            )
+            drawLine(
+                color = Color.Black,
+                start = Offset(0f, 0f),
+                end = Offset(0f, h),
+                strokeWidth = 2f
+            )
+
+            val xStep = (xMax - xMin) / 5
+            val yStep = (yMax - yMin) / 5
+            for (i in 0..5) {
+                val x = xMin + i * xStep
+                val y = yMin + i * yStep
+                val xPos = mapX(x)
+                val yPos = mapY(y)
+
+                drawLine(
+                    color = Color.Gray,
+                    start = Offset(xPos, h),
+                    end = Offset(xPos, h - 10f),
+                    strokeWidth = 1f
+                )
+                drawContext.canvas.nativeCanvas.drawText(
+                    String.format("%.1f", x),
+                    xPos,
+                    h + 20f,
+                    android.graphics.Paint().apply {
+                        color = android.graphics.Color.BLACK
+                        textSize = 24f
+                        textAlign = android.graphics.Paint.Align.CENTER
+                    }
+                )
+
+                drawLine(
+                    color = Color.Gray,
+                    start = Offset(0f, yPos),
+                    end = Offset(10f, yPos),
+                    strokeWidth = 1f
+                )
+                drawContext.canvas.nativeCanvas.drawText(
+                    String.format("%.1f", y),
+                    -30f,
+                    yPos + 8f,
+                    android.graphics.Paint().apply {
+                        color = android.graphics.Color.BLACK
+                        textSize = 24f
+                        textAlign = android.graphics.Paint.Align.RIGHT
+                    }
+                )
+            }
+
             xValues.zip(yValues).forEach { (x, y) ->
                 drawCircle(
                     color = Color.Blue,
@@ -85,9 +145,8 @@ fun ScatterPlotWithRegression(
                 )
             }
 
-            // draw regression line from xMin to xMax
             val start = Offset(mapX(xMin), mapY(m * xMin + b))
-            val end   = Offset(mapX(xMax), mapY(m * xMax + b))
+            val end = Offset(mapX(xMax), mapY(m * xMax + b))
             drawLine(
                 color = Color.Red,
                 strokeWidth = 4f,
@@ -95,5 +154,11 @@ fun ScatterPlotWithRegression(
                 end = end
             )
         }
+
+        Text(
+            text = String.format(Locale.US, "y = %.2fx + %.2f", m, b),
+            fontSize = 16.sp,
+            modifier = Modifier.align(Alignment.CenterHorizontally)
+        )
     }
 }
