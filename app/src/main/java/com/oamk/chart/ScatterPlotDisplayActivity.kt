@@ -52,9 +52,13 @@ fun ScatterPlotWithRegression(
 ) {
     val xMean = xValues.average().toFloat()
     val yMean = yValues.average().toFloat()
-    val m = xValues.zip(yValues).fold(0f) { acc, (x, y) ->
+    val numerator = xValues.zip(yValues).fold(0f) { acc, (x, y) ->
         acc + (x - xMean) * (y - yMean)
-    } / xValues.fold(0f) { acc, x -> acc + (x - xMean).let { it * it } }
+    }
+    val denominator = xValues.fold(0f) { acc, x ->
+        acc + (x - xMean) * (x - xMean)
+    }
+    val m = if (denominator == 0f) 0f else numerator / denominator
     val b = yMean - m * xMean
 
     val xMin = xValues.minOrNull() ?: 0f

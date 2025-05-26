@@ -65,7 +65,7 @@ fun CreatePosNegChartScreen() {
         )
 
         Spacer(Modifier.height(8.dp))
-        Text("X Label        Y Value", fontSize = 16.sp)
+        Text("X Label Y Value", fontSize = 16.sp)
 
         columns.forEachIndexed { idx, pair ->
             Row(
