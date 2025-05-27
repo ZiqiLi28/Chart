@@ -68,7 +68,7 @@ fun MainScreen(onChartSelected: (String) -> Unit) {
         // Button for Scatter Plot Linear Regression
         ChartButton(text = "Scatter Plot and Linear Regression", onClick = { onChartSelected("ScatterPlot") })
         // Button for Scatter Plot and Quadratic Regression
-        ChartButton(text = "Quadratic Regression", onClick = { onChartSelected("Quadratic") })
+        ChartButton(text = "Scatter Plot and Quadratic Regression", onClick = { onChartSelected("Quadratic") })
     }
 }
 

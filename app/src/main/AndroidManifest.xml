@@ -13,11 +13,13 @@
         android:theme="@style/Theme.Chart"
         tools:targetApi="31">
         <activity android:name=".CreateBarLineChartActivity"/>
-        <activity android:name=".BarLineChartDisplayActivity"/>
+        <activity android:name=".DisplayBarLineChartActivity"/>
         <activity android:name=".CreatePosNegChartActivity"/>
-        <activity android:name=".PosNegChartDisplayActivity"/>
+        <activity android:name=".DisplayPosNegChartActivity"/>
         <activity android:name=".CreateScatterPlotActivity" />
-        <activity android:name=".ScatterPlotDisplayActivity" />
+        <activity android:name=".DisplayScatterPlotActivity" />
+        <activity android:name=".CreateQuadraticPlotActivity" />
+        <activity android:name=".DisplayQuadraticPlotActivity" />
         <activity
             android:name=".MainActivity"
             android:exported="true"

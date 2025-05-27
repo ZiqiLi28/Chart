@@ -1,5 +1,6 @@
 package com.oamk.chart
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -11,23 +12,30 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.nativeCanvas
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.oamk.chart.ui.theme.ChartTheme
-import kotlin.math.pow
 import java.util.Locale
 import kotlin.math.abs
+import kotlin.math.pow
+import androidx.core.view.WindowCompat
 
 class DisplayQuadraticPlotActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        WindowCompat.setDecorFitsSystemWindows(window, false)
+
         val title = intent.getStringExtra("CHART_TITLE") ?: "Quadratic Plot"
         val xValues = intent.getFloatArrayExtra("X_VALUES")?.toList() ?: emptyList()
         val yValues = intent.getFloatArrayExtra("Y_VALUES")?.toList() ?: emptyList()
 
         setContent {
             ChartTheme {
-                Surface(modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background) {
+                Surface(modifier = Modifier
+                    .fillMaxSize()
+                    .padding(WindowInsets.safeDrawing.asPaddingValues()),
+                    color = MaterialTheme.colorScheme.background) {
                     QuadraticPlot(title, xValues, yValues)
                 }
             }
@@ -35,6 +43,7 @@ class DisplayQuadraticPlotActivity : ComponentActivity() {
     }
 }
 
+@SuppressLint("DefaultLocale")
 @Composable
 fun QuadraticPlot(title: String, xValues: List<Float>, yValues: List<Float>) {
     val n = xValues.size
@@ -43,18 +52,17 @@ fun QuadraticPlot(title: String, xValues: List<Float>, yValues: List<Float>) {
     val sumX3 = xValues.sumOf { it.toDouble().pow(3) }.toFloat()
     val sumX4 = xValues.sumOf { it.toDouble().pow(4) }.toFloat()
     val sumY = yValues.sum()
-    val sumXY = xValues.indices.sumOf { xValues[it] * yValues[it] }
+    val sumXY = xValues.indices.sumOf { (xValues[it] * yValues[it]).toDouble() }.toFloat()
     val sumX2Y = xValues.indices.sumOf { xValues[it].toDouble().pow(2) * yValues[it] }.toFloat()
 
-    // Solve normal equations for a*x^2 + b*x + c
-    val A = arrayOf(
+    val aMatrix = arrayOf(
         floatArrayOf(sumX4, sumX3, sumX2),
         floatArrayOf(sumX3, sumX2, sumX),
         floatArrayOf(sumX2, sumX, n.toFloat())
     )
-    val B = floatArrayOf(sumX2Y, sumXY, sumY)
+    val bVector = floatArrayOf(sumX2Y, sumXY, sumY)
 
-    val coeffs = solve3x3(A, B)
+    val coeffs = solve3x3(aMatrix, bVector)
     val a = coeffs[0]
     val b = coeffs[1]
     val c = coeffs[2]
@@ -70,29 +78,90 @@ fun QuadraticPlot(title: String, xValues: List<Float>, yValues: List<Float>) {
         Canvas(modifier = Modifier
             .fillMaxWidth()
             .height(300.dp)) {
+
             val w = size.width
             val h = size.height
+
             fun mapX(x: Float) = (x - xMin) / (xMax - xMin) * w
             fun mapY(y: Float) = h - ((y - yMin) / (yMax - yMin) * h)
 
-            drawLine(Color.Black, Offset(0f, h), Offset(w, h), 2f)
-            drawLine(Color.Black, Offset(0f, 0f), Offset(0f, h), 2f)
+            val axisPaint = android.graphics.Paint().apply {
+                color = android.graphics.Color.BLACK
+                textSize = 24f
+                isAntiAlias = true
+            }
 
-            // draw points
+            val originX = mapX(xMin)
+            val originY = mapY(yMin)
+
+            drawLine(
+                color = Color.Black,
+                start = Offset(originX, 0f),
+                end = Offset(originX, h),
+                strokeWidth = 2f
+            )
+            drawLine(
+                color = Color.Black,
+                start = Offset(0f, originY),
+                end = Offset(w, originY),
+                strokeWidth = 2f
+            )
+
+            val xStep = (xMax - xMin) / 5
+            val yStep = (yMax - yMin) / 5
+            for (i in 0..5) {
+                val x = xMin + i * xStep
+                val y = yMin + i * yStep
+                val xPos = mapX(x)
+                val yPos = mapY(y)
+
+                drawLine(
+                    color = Color.Gray,
+                    start = Offset(xPos, originY - 8f),
+                    end = Offset(xPos, originY + 8f),
+                    strokeWidth = 1f
+                )
+                drawContext.canvas.nativeCanvas.drawText(
+                    String.format("%.1f", x),
+                    xPos,
+                    originY + 30f,
+                    axisPaint.apply { textAlign = android.graphics.Paint.Align.CENTER }
+                )
+
+                drawLine(
+                    color = Color.Gray,
+                    start = Offset(originX - 8f, yPos),
+                    end = Offset(originX + 8f, yPos),
+                    strokeWidth = 1f
+                )
+                drawContext.canvas.nativeCanvas.drawText(
+                    String.format("%.1f", y),
+                    originX - 10f,
+                    yPos + 8f,
+                    axisPaint.apply { textAlign = android.graphics.Paint.Align.RIGHT }
+                )
+            }
+
+            // Draw points
             xValues.zip(yValues).forEach { (x, y) ->
                 drawCircle(Color.Blue, radius = 6f, center = Offset(mapX(x), mapY(y)))
             }
 
-            // draw quadratic curve
+            // Draw quadratic regression curve
             val step = (xMax - xMin) / 100
-            var prev = Offset(mapX(xMin), mapY(a * xMin * xMin + b * xMin + c))
-            for (x in xMin + step..xMax step step) {
+            var x = xMin
+            var prev = Offset(mapX(x), mapY(a * x * x + b * x + c))
+
+            while (x <= xMax) {
                 val y = a * x * x + b * x + c
                 val next = Offset(mapX(x), mapY(y))
                 drawLine(Color.Red, start = prev, end = next, strokeWidth = 3f)
                 prev = next
+                x += step
             }
         }
+
+        Spacer(modifier = Modifier.height(24.dp))
 
         Text(
             text = String.format(Locale.US, "y = %.2fx² + %.2fx + %.2f", a, b, c),
@@ -102,14 +171,13 @@ fun QuadraticPlot(title: String, xValues: List<Float>, yValues: List<Float>) {
     }
 }
 
-// Gaussian elimination for 3x3
-fun solve3x3(A: Array<FloatArray>, B: FloatArray): FloatArray {
+fun solve3x3(aMatrix: Array<FloatArray>, bVector: FloatArray): FloatArray {
     val matrix = Array(3) { FloatArray(4) }
     for (i in 0..2) {
         for (j in 0..2) {
-            matrix[i][j] = A[i][j]
+            matrix[i][j] = aMatrix[i][j]
         }
-        matrix[i][3] = B[i]
+        matrix[i][3] = bVector[i]
     }
 
     for (i in 0..2) {

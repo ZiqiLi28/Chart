@@ -112,7 +112,7 @@ fun CreatePosNegChartScreen() {
             }
             val yValues = yRaw.filterNotNull().map { it - pivotValue }
 
-            val intent = Intent(context, PosNegChartDisplayActivity::class.java).apply {
+            val intent = Intent(context, DisplayPosNegChartActivity::class.java).apply {
                 putExtra("CHART_TITLE", title.text)
                 putStringArrayListExtra("X_LABELS", ArrayList(xLabels))
                 putExtra("Y_ADJUSTED", yValues.toFloatArray())

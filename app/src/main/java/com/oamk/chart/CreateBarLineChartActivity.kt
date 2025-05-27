@@ -64,7 +64,7 @@ fun CreateChartScreen(chartType: String) {
             .verticalScroll(rememberScrollState()),
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
-        Text(text = "Chart Type: $chartType", fontSize = 18.sp)
+        Text(text = chartType, fontSize = 18.sp)
 
         OutlinedTextField(
             value = title,
@@ -136,7 +136,7 @@ fun CreateChartScreen(chartType: String) {
                 val xLabels = columns.map { it.first.value.text }
                 val yLabels = columns.map { it.second.value.text }
 
-                val intent = Intent(context, BarLineChartDisplayActivity::class.java).apply {
+                val intent = Intent(context, DisplayBarLineChartActivity::class.java).apply {
                     putExtra("CHART_TITLE", title.text)
                     putExtra("CHART_TYPE", chartType)
                     putStringArrayListExtra("X_LABELS", ArrayList(xLabels))

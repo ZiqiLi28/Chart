@@ -130,7 +130,7 @@ fun CreateScatterPlotScreen() {
                 }
 
                 // launch display
-                val intent = Intent(context, ScatterPlotDisplayActivity::class.java).apply {
+                val intent = Intent(context, DisplayScatterPlotActivity::class.java).apply {
                     putExtra("CHART_TITLE", title.text)
                     putExtra("X_VALUES", xList.toFloatArray())
                     putExtra("Y_VALUES", yList.toFloatArray())

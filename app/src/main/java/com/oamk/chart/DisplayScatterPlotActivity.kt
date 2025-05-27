@@ -19,7 +19,7 @@ import com.oamk.chart.ui.theme.ChartTheme
 import java.util.Locale
 import androidx.compose.ui.Alignment
 
-class ScatterPlotDisplayActivity : ComponentActivity() {
+class DisplayScatterPlotActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         WindowCompat.setDecorFitsSystemWindows(window, false)
@@ -85,16 +85,25 @@ fun ScatterPlotWithRegression(
             fun mapX(x: Float) = (x - xMin) / (xMax - xMin) * w
             fun mapY(y: Float) = h - ((y - yMin) / (yMax - yMin) * h)
 
+            val axisPaint = android.graphics.Paint().apply {
+                color = android.graphics.Color.BLACK
+                textSize = 24f
+                isAntiAlias = true
+            }
+
+            val originX = mapX(xMin)
+            val originY = mapY(yMin)
+
             drawLine(
                 color = Color.Black,
-                start = Offset(0f, h),
-                end = Offset(w, h),
+                start = Offset(originX, 0f),
+                end = Offset(originX, h),
                 strokeWidth = 2f
             )
             drawLine(
                 color = Color.Black,
-                start = Offset(0f, 0f),
-                end = Offset(0f, h),
+                start = Offset(0f, originY),
+                end = Offset(w, originY),
                 strokeWidth = 2f
             )
 
@@ -108,36 +117,28 @@ fun ScatterPlotWithRegression(
 
                 drawLine(
                     color = Color.Gray,
-                    start = Offset(xPos, h),
-                    end = Offset(xPos, h - 10f),
+                    start = Offset(xPos, originY - 8f),
+                    end = Offset(xPos, originY + 8f),
                     strokeWidth = 1f
                 )
                 drawContext.canvas.nativeCanvas.drawText(
                     String.format("%.1f", x),
                     xPos,
-                    h + 20f,
-                    android.graphics.Paint().apply {
-                        color = android.graphics.Color.BLACK
-                        textSize = 24f
-                        textAlign = android.graphics.Paint.Align.CENTER
-                    }
+                    originY + 30f,
+                    axisPaint.apply { textAlign = android.graphics.Paint.Align.CENTER }
                 )
 
                 drawLine(
                     color = Color.Gray,
-                    start = Offset(0f, yPos),
-                    end = Offset(10f, yPos),
+                    start = Offset(originX - 8f, yPos),
+                    end = Offset(originX + 8f, yPos),
                     strokeWidth = 1f
                 )
                 drawContext.canvas.nativeCanvas.drawText(
                     String.format("%.1f", y),
-                    -30f,
+                    originX - 10f,
                     yPos + 8f,
-                    android.graphics.Paint().apply {
-                        color = android.graphics.Color.BLACK
-                        textSize = 24f
-                        textAlign = android.graphics.Paint.Align.RIGHT
-                    }
+                    axisPaint.apply { textAlign = android.graphics.Paint.Align.RIGHT }
                 )
             }
 
@@ -158,6 +159,8 @@ fun ScatterPlotWithRegression(
                 end = end
             )
         }
+
+        Spacer(modifier = Modifier.height(16.dp))
 
         Text(
             text = String.format(Locale.US, "y = %.2fx + %.2f", m, b),
