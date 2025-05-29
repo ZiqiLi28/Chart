@@ -67,7 +67,6 @@ fun QuadraticPlot(title: String, xValues: List<Float>, yValues: List<Float>) {
     val b = coeffs[1]
     val c = coeffs[2]
 
-    // 包含原点的边界设定
     val xMinData = xValues.minOrNull() ?: 0f
     val xMaxData = xValues.maxOrNull() ?: 1f
     val yMinData = yValues.minOrNull() ?: 0f
@@ -100,7 +99,6 @@ fun QuadraticPlot(title: String, xValues: List<Float>, yValues: List<Float>) {
             val originX = mapX(0f)
             val originY = mapY(0f)
 
-            // 坐标轴
             drawLine(
                 color = Color.Black,
                 start = Offset(originX, 0f),
@@ -114,7 +112,6 @@ fun QuadraticPlot(title: String, xValues: List<Float>, yValues: List<Float>) {
                 strokeWidth = 2f
             )
 
-            // 刻度线
             val xStep = (xMax - xMin) / 5
             val yStep = (yMax - yMin) / 5
             for (i in 0..5) {
@@ -150,12 +147,10 @@ fun QuadraticPlot(title: String, xValues: List<Float>, yValues: List<Float>) {
                 )
             }
 
-            // 数据点
             xValues.zip(yValues).forEach { (x, y) ->
                 drawCircle(Color.Blue, radius = 6f, center = Offset(mapX(x), mapY(y)))
             }
 
-            // 二次回归曲线
             val step = (xMax - xMin) / 100
             var x = xMin
             var prev = Offset(mapX(x), mapY(a * x * x + b * x + c))
