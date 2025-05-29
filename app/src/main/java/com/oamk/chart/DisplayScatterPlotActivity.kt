@@ -61,10 +61,10 @@ fun ScatterPlotWithRegression(
     val m = if (denominator == 0f) 0f else numerator / denominator
     val b = yMean - m * xMean
 
-    val xMin = xValues.minOrNull() ?: 0f
-    val xMax = xValues.maxOrNull() ?: 1f
-    val yMin = yValues.minOrNull() ?: 0f
-    val yMax = yValues.maxOrNull() ?: 1f
+    val xMin = minOf(xValues.minOrNull() ?: 0f, 0f)
+    val xMax = maxOf(xValues.maxOrNull() ?: 1f, 0f)
+    val yMin = minOf(yValues.minOrNull() ?: 0f, 0f)
+    val yMax = maxOf(yValues.maxOrNull() ?: 1f, 0f)
 
     Column(
         modifier = Modifier
@@ -83,7 +83,7 @@ fun ScatterPlotWithRegression(
             val h = size.height
 
             fun mapX(x: Float) = (x - xMin) / (xMax - xMin) * w
-            fun mapY(y: Float) = h - ((y - yMin) / (yMax - yMin) * h)
+            fun mapY(y: Float) = h - (y - yMin) / (yMax - yMin) * h
 
             val axisPaint = android.graphics.Paint().apply {
                 color = android.graphics.Color.BLACK
@@ -91,8 +91,8 @@ fun ScatterPlotWithRegression(
                 isAntiAlias = true
             }
 
-            val originX = mapX(xMin)
-            val originY = mapY(yMin)
+            val originX = mapX(0f)
+            val originY = mapY(0f)
 
             drawLine(
                 color = Color.Black,
@@ -115,12 +115,7 @@ fun ScatterPlotWithRegression(
                 val xPos = mapX(x)
                 val yPos = mapY(y)
 
-                drawLine(
-                    color = Color.Gray,
-                    start = Offset(xPos, originY - 8f),
-                    end = Offset(xPos, originY + 8f),
-                    strokeWidth = 1f
-                )
+                drawLine(Color.Gray, Offset(xPos, originY - 8f), Offset(xPos, originY + 8f), 1f)
                 drawContext.canvas.nativeCanvas.drawText(
                     String.format("%.1f", x),
                     xPos,
@@ -128,12 +123,7 @@ fun ScatterPlotWithRegression(
                     axisPaint.apply { textAlign = android.graphics.Paint.Align.CENTER }
                 )
 
-                drawLine(
-                    color = Color.Gray,
-                    start = Offset(originX - 8f, yPos),
-                    end = Offset(originX + 8f, yPos),
-                    strokeWidth = 1f
-                )
+                drawLine(Color.Gray, Offset(originX - 8f, yPos), Offset(originX + 8f, yPos), 1f)
                 drawContext.canvas.nativeCanvas.drawText(
                     String.format("%.1f", y),
                     originX - 10f,
