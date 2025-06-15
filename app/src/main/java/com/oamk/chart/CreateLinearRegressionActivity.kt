@@ -19,7 +19,7 @@ import androidx.compose.ui.unit.sp
 import androidx.core.view.WindowCompat
 import com.oamk.chart.ui.theme.ChartTheme
 
-class CreateScatterPlotActivity : ComponentActivity() {
+class CreateLinearRegressionActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         WindowCompat.setDecorFitsSystemWindows(window, false)
@@ -32,7 +32,7 @@ class CreateScatterPlotActivity : ComponentActivity() {
                         .padding(WindowInsets.safeDrawing.asPaddingValues()),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    CreateScatterPlotScreen()
+                    CreateLinearRegressionScreen()
                 }
             }
         }
@@ -40,7 +40,7 @@ class CreateScatterPlotActivity : ComponentActivity() {
 }
 
 @Composable
-fun CreateScatterPlotScreen() {
+fun CreateLinearRegressionScreen() {
     var title by remember { mutableStateOf(TextFieldValue("")) }
     val points = remember {
         mutableStateListOf(
@@ -56,7 +56,7 @@ fun CreateScatterPlotScreen() {
             .padding(16.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
-        Text("Scatter Plot", fontSize = 20.sp)
+        Text("Scatter Plot with Regression Line", fontSize = 20.sp)
 
         OutlinedTextField(
             value = title,
@@ -114,13 +114,14 @@ fun CreateScatterPlotScreen() {
 
         Button(
             onClick = {
+                // parse floats
                 val xVals = points.map { it.first.value.text.toFloatOrNull() }
                 val yVals = points.map { it.second.value.text.toFloatOrNull() }
                 if (xVals.any { it == null } || yVals.any { it == null }) {
                     Toast.makeText(context, "Enter valid numeric values", Toast.LENGTH_SHORT).show()
                     return@Button
                 }
-
+                // all non-null
                 val xList = xVals.filterNotNull()
                 val yList = yVals.filterNotNull()
                 if (xList.size < 2) {
@@ -128,7 +129,8 @@ fun CreateScatterPlotScreen() {
                     return@Button
                 }
 
-                val intent = Intent(context, DisplayScatterPlotActivity::class.java).apply {
+                // launch display
+                val intent = Intent(context, DisplayLinearRegressionActivity::class.java).apply {
                     putExtra("CHART_TITLE", title.text)
                     putExtra("X_VALUES", xList.toFloatArray())
                     putExtra("Y_VALUES", yList.toFloatArray())

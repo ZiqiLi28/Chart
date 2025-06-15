@@ -18,8 +18,12 @@
         <activity android:name=".DisplayPosNegChartActivity"/>
         <activity android:name=".CreateScatterPlotActivity" />
         <activity android:name=".DisplayScatterPlotActivity" />
+        <activity android:name=".CreateLinearRegressionActivity" />
+        <activity android:name=".DisplayLinearRegressionActivity" />
         <activity android:name=".CreateQuadraticPlotActivity" />
         <activity android:name=".DisplayQuadraticPlotActivity" />
+        <activity android:name=".CreateExponentialRegressionActivity" />
+        <activity android:name=".DisplayExponentialRegressionActivity" />
         <activity
             android:name=".MainActivity"
             android:exported="true"

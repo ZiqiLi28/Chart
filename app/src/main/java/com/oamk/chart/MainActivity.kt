@@ -36,6 +36,7 @@ class MainActivity : ComponentActivity() {
                             "Exponential" -> Intent(this, CreateExponentialRegressionActivity::class.java)
                             "Quadratic" -> Intent(this, CreateQuadraticPlotActivity::class.java)
                             "ScatterPlot" -> Intent(this, CreateScatterPlotActivity::class.java)
+                            "LinearRegression" -> Intent(this, CreateLinearRegressionActivity::class.java)
                             "PosNegBarChart" -> Intent(this, CreatePosNegChartActivity::class.java)
                             "BarChart", "LineChart" -> Intent(this, CreateBarLineChartActivity::class.java).apply {
                                 putExtra("CHART_TYPE", chartType)
@@ -66,8 +67,10 @@ fun MainScreen(onChartSelected: (String) -> Unit) {
         ChartButton(text = "Line Chart", onClick = { onChartSelected("LineChart") })
         // Button for positive negative bar chart
         ChartButton(text = "Pos‑Neg Bar Chart", onClick = { onChartSelected("PosNegBarChart") })
+        // Button for Scatter Plot
+        ChartButton(text = "Scatter Plot", onClick = { onChartSelected("ScatterPlot") })
         // Button for Linear Regression
-        ChartButton(text = "Linear Regression", onClick = { onChartSelected("ScatterPlot") })
+        ChartButton(text = "Linear Regression", onClick = { onChartSelected("LinearRegression") })
         // Button for Quadratic Regression
         ChartButton(text = "Quadratic Regression", onClick = { onChartSelected("Quadratic") })
         // Button for Exponential Regression

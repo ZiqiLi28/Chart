@@ -16,8 +16,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.view.WindowCompat
 import com.oamk.chart.ui.theme.ChartTheme
-import java.util.Locale
-import androidx.compose.ui.Alignment
 
 class DisplayScatterPlotActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -36,7 +34,7 @@ class DisplayScatterPlotActivity : ComponentActivity() {
                         .padding(WindowInsets.safeDrawing.asPaddingValues()),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    ScatterPlotWithRegression(title, xValues, yValues)
+                    ScatterPlot(title, xValues, yValues)
                 }
             }
         }
@@ -45,22 +43,11 @@ class DisplayScatterPlotActivity : ComponentActivity() {
 
 @SuppressLint("DefaultLocale")
 @Composable
-fun ScatterPlotWithRegression(
+fun ScatterPlot(
     title: String,
     xValues: List<Float>,
     yValues: List<Float>
 ) {
-    val xMean = xValues.average().toFloat()
-    val yMean = yValues.average().toFloat()
-    val numerator = xValues.zip(yValues).fold(0f) { acc, (x, y) ->
-        acc + (x - xMean) * (y - yMean)
-    }
-    val denominator = xValues.fold(0f) { acc, x ->
-        acc + (x - xMean) * (x - xMean)
-    }
-    val m = if (denominator == 0f) 0f else numerator / denominator
-    val b = yMean - m * xMean
-
     val xMin = minOf(xValues.minOrNull() ?: 0f, 0f)
     val xMax = maxOf(xValues.maxOrNull() ?: 1f, 0f)
     val yMin = minOf(yValues.minOrNull() ?: 0f, 0f)
@@ -139,23 +126,6 @@ fun ScatterPlotWithRegression(
                     center = Offset(mapX(x), mapY(y))
                 )
             }
-
-            val start = Offset(mapX(xMin), mapY(m * xMin + b))
-            val end = Offset(mapX(xMax), mapY(m * xMax + b))
-            drawLine(
-                color = Color.Red,
-                strokeWidth = 4f,
-                start = start,
-                end = end
-            )
         }
-
-        Spacer(modifier = Modifier.height(16.dp))
-
-        Text(
-            text = String.format(Locale.US, "y = %.2fx + %.2f", m, b),
-            fontSize = 16.sp,
-            modifier = Modifier.align(Alignment.CenterHorizontally)
-        )
     }
 }
