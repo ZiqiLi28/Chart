@@ -24,6 +24,8 @@
         <activity android:name=".DisplayQuadraticPlotActivity" />
         <activity android:name=".CreateExponentialRegressionActivity" />
         <activity android:name=".DisplayExponentialRegressionActivity" />
+        <activity android:name=".CreateFunctionPlotActivity" />
+        <activity android:name=".DisplayFunctionPlotActivity" />
         <activity
             android:name=".MainActivity"
             android:exported="true"

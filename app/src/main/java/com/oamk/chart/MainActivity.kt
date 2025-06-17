@@ -16,6 +16,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.view.WindowCompat
 import com.oamk.chart.ui.theme.ChartTheme
+import androidx.compose.ui.graphics.Color
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -33,6 +34,7 @@ class MainActivity : ComponentActivity() {
                 ) {
                     MainScreen(onChartSelected = { chartType ->
                         val intent = when (chartType) {
+                            "FunctionPlot" -> Intent(this, CreateFunctionPlotActivity::class.java)
                             "Exponential" -> Intent(this, CreateExponentialRegressionActivity::class.java)
                             "Quadratic" -> Intent(this, CreateQuadraticPlotActivity::class.java)
                             "ScatterPlot" -> Intent(this, CreateScatterPlotActivity::class.java)
@@ -75,14 +77,21 @@ fun MainScreen(onChartSelected: (String) -> Unit) {
         ChartButton(text = "Quadratic Regression", onClick = { onChartSelected("Quadratic") })
         // Button for Exponential Regression
         ChartButton(text = "Exponential Regression", onClick = { onChartSelected("Exponential") })
+        // Button for Function Plot
+        ChartButton(text = "Function Plotting", onClick = { onChartSelected("FunctionPlot") }, colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF4CAF50)))
     }
 }
 
 @Composable
-fun ChartButton(text: String, onClick: () -> Unit) {
+fun ChartButton(
+    text: String,
+    onClick: () -> Unit,
+    colors: ButtonColors = ButtonDefaults.buttonColors()
+) {
     Button(
         onClick = onClick,
         shape = RoundedCornerShape(16.dp),
+        colors = colors,
         modifier = Modifier
             .fillMaxWidth()
             .height(60.dp)

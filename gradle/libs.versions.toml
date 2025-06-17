@@ -5,9 +5,9 @@ coreKtx = "1.16.0"
 junit = "4.13.2"
 junitVersion = "1.2.1"
 espressoCore = "3.6.1"
-lifecycleRuntimeKtx = "2.9.0"
+lifecycleRuntimeKtx = "2.9.1"
 activityCompose = "1.10.1"
-composeBom = "2025.05.01"
+composeBom = "2025.06.00"
 mpandroidchart = "v3.1.0"
 vico = "2.1.2"
 
@@ -32,6 +32,7 @@ vico-compose-m2 = { group = "com.patrykandpatrick.vico", name = "compose-m2", ve
 vico-compose-m3 = { group = "com.patrykandpatrick.vico", name = "compose-m3", version.ref = "vico" }
 vico-multiplatform = { group = "com.patrykandpatrick.vico", name = "multiplatform", version.ref = "vico" }
 vico-views = { group = "com.patrykandpatrick.vico", name = "views", version.ref = "vico" }
+mathparser = { group = "org.mariuszgromada.math", name = "MathParser.org-mXparser", version = "5.2.1" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

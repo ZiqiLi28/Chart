@@ -54,6 +54,7 @@ dependencies {
     implementation(libs.vico.multiplatform)
     implementation(libs.mpandroidchart)
     implementation(libs.vico.views)
+    implementation(libs.mathparser)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
