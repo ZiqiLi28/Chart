@@ -34,6 +34,7 @@ class MainActivity : ComponentActivity() {
                 ) {
                     MainScreen(onChartSelected = { chartType ->
                         val intent = when (chartType) {
+                            "ParametrizedCurve" -> Intent(this, CreateParametrizedCurveActivity::class.java)
                             "FunctionPlot" -> Intent(this, CreateFunctionPlotActivity::class.java)
                             "Exponential" -> Intent(this, CreateExponentialRegressionActivity::class.java)
                             "Quadratic" -> Intent(this, CreateQuadraticPlotActivity::class.java)
@@ -78,7 +79,12 @@ fun MainScreen(onChartSelected: (String) -> Unit) {
         // Button for Exponential Regression
         ChartButton(text = "Exponential Regression", onClick = { onChartSelected("Exponential") })
         // Button for Function Plot
-        ChartButton(text = "Function Plotting", onClick = { onChartSelected("FunctionPlot") }, colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF4CAF50)))
+        ChartButton(text = "Function Plotting",
+            onClick = { onChartSelected("FunctionPlot") },
+            colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF4CAF50)))
+        ChartButton(text = "Parametrized Curve",
+            onClick = { onChartSelected("ParametrizedCurve") },
+            colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF4CAF50)))
     }
 }
 

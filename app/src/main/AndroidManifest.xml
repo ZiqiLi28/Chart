@@ -26,6 +26,8 @@
         <activity android:name=".DisplayExponentialRegressionActivity" />
         <activity android:name=".CreateFunctionPlotActivity" />
         <activity android:name=".DisplayFunctionPlotActivity" />
+        <activity android:name=".CreateParametrizedCurveActivity" />
+        <activity android:name=".DisplayParametrizedCurveActivity" />
         <activity
             android:name=".MainActivity"
             android:exported="true"
