@@ -2,15 +2,18 @@ package com.oamk.chart
 
 import android.content.Intent
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
-import com.oamk.chart.ui.theme.ChartTheme
 import androidx.core.view.WindowCompat
+import com.oamk.chart.ui.theme.ChartTheme
 
 class CreateParametrizedCurveActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -18,17 +21,13 @@ class CreateParametrizedCurveActivity : ComponentActivity() {
         WindowCompat.setDecorFitsSystemWindows(window, false)
         setContent {
             ChartTheme {
-                Surface(modifier = Modifier.fillMaxSize(). padding(WindowInsets.safeDrawing.asPaddingValues()),
-                    color = MaterialTheme.colorScheme.background) {
-                    ParametrizedCurveInputScreen { tMin, tMax, xExpr, yExpr ->
-                        val intent = Intent(this, DisplayParametrizedCurveActivity::class.java).apply {
-                            putExtra("T_MIN", tMin)
-                            putExtra("T_MAX", tMax)
-                            putExtra("X_EXPR", xExpr)
-                            putExtra("Y_EXPR", yExpr)
-                        }
-                        startActivity(intent)
-                    }
+                Surface(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(WindowInsets.safeDrawing.asPaddingValues()),
+                    color = MaterialTheme.colorScheme.background
+                ) {
+                    CreateParametrizedCurveScreen()
                 }
             }
         }
@@ -36,28 +35,75 @@ class CreateParametrizedCurveActivity : ComponentActivity() {
 }
 
 @Composable
-fun ParametrizedCurveInputScreen(onSubmit: (Float, Float, String, String) -> Unit) {
-    var tMin by remember { mutableStateOf("") }
-    var tMax by remember { mutableStateOf("") }
-    var xExpr by remember { mutableStateOf("") }
-    var yExpr by remember { mutableStateOf("") }
+fun CreateParametrizedCurveScreen() {
+    val context = LocalContext.current
 
-    Column(modifier = Modifier.padding(16.dp)) {
-        TextField(value = tMin, onValueChange = { tMin = it }, label = { Text("tMin") })
-        Spacer(modifier = Modifier.height(8.dp))
-        TextField(value = tMax, onValueChange = { tMax = it }, label = { Text("tMax") })
-        Spacer(modifier = Modifier.height(8.dp))
-        TextField(value = xExpr, onValueChange = { xExpr = it }, label = { Text("x(t) expression") })
-        Spacer(modifier = Modifier.height(8.dp))
-        TextField(value = yExpr, onValueChange = { yExpr = it }, label = { Text("y(t) expression") })
-        Spacer(modifier = Modifier.height(16.dp))
+    var tMinInput by remember { mutableStateOf(TextFieldValue("0")) }
+    var tMaxInput by remember { mutableStateOf(TextFieldValue("3.14")) }
+    var xExprInput by remember { mutableStateOf(TextFieldValue("cos(t)")) }
+    var yExprInput by remember { mutableStateOf(TextFieldValue("sin(t)")) }
 
-        Button(onClick = {
-            val tMinFloat = tMin.toFloatOrNull() ?: 0f
-            val tMaxFloat = tMax.toFloatOrNull() ?: 1f
-            onSubmit(tMinFloat, tMaxFloat, xExpr, yExpr)
-        }) {
-            Text("Plot Curve")
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(16.dp),
+        verticalArrangement = Arrangement.spacedBy(16.dp)
+    ) {
+        Text("Enter Parametrized Curve (x(t), y(t))")
+
+        OutlinedTextField(
+            value = xExprInput,
+            onValueChange = { xExprInput = it },
+            label = { Text("x(t) =") },
+            modifier = Modifier.fillMaxWidth()
+        )
+
+        OutlinedTextField(
+            value = yExprInput,
+            onValueChange = { yExprInput = it },
+            label = { Text("y(t) =") },
+            modifier = Modifier.fillMaxWidth()
+        )
+
+        Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+            OutlinedTextField(
+                value = tMinInput,
+                onValueChange = { tMinInput = it },
+                label = { Text("t Min") },
+                modifier = Modifier.weight(1f)
+            )
+            OutlinedTextField(
+                value = tMaxInput,
+                onValueChange = { tMaxInput = it },
+                label = { Text("t Max") },
+                modifier = Modifier.weight(1f)
+            )
+        }
+
+        Button(
+            onClick = {
+                val tMin = tMinInput.text.toFloatOrNull()
+                val tMax = tMaxInput.text.toFloatOrNull()
+                if (tMin == null || tMax == null || tMin >= tMax) {
+                    Toast.makeText(context, "Invalid t range", Toast.LENGTH_SHORT).show()
+                    return@Button
+                }
+                if (xExprInput.text.isBlank() || yExprInput.text.isBlank()) {
+                    Toast.makeText(context, "Expressions cannot be empty", Toast.LENGTH_SHORT).show()
+                    return@Button
+                }
+
+                val intent = Intent(context, DisplayParametrizedCurveActivity::class.java).apply {
+                    putExtra("X_EXPR", xExprInput.text)
+                    putExtra("Y_EXPR", yExprInput.text)
+                    putExtra("T_MIN", tMin)
+                    putExtra("T_MAX", tMax)
+                }
+                context.startActivity(intent)
+            },
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Text("Draw Curve")
         }
     }
 }
