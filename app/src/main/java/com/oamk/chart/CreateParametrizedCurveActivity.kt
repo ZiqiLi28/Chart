@@ -12,6 +12,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.core.view.WindowCompat
 import com.oamk.chart.ui.theme.ChartTheme
 
@@ -49,7 +50,7 @@ fun CreateParametrizedCurveScreen() {
             .padding(16.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
-        Text("Enter Parametrized Curve (x(t), y(t))")
+        Text("Enter Parametrized Curve (x(t), y(t))", fontSize = 20.sp)
 
         OutlinedTextField(
             value = xExprInput,

@@ -12,6 +12,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.oamk.chart.ui.theme.ChartTheme
 import androidx.core.view.WindowCompat
 
@@ -45,7 +46,7 @@ fun CreateFunctionPlotScreen() {
             .padding(16.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
-        Text("Enter a Function (e.g. x^2 + sin(x))")
+        Text("Enter a Function (e.g. x^2 + sin(x))", fontSize = 20.sp)
 
         OutlinedTextField(
             value = functionInput,

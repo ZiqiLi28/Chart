@@ -77,9 +77,7 @@ fun DisplayParametrizedCurve(xExprText: String, yExprText: String, tMin: Float, 
     val yMax = points.maxOfOrNull { it.second } ?: 1f
 
     val totalLength = remember {
-        points.zipWithNext { (x1, y1), (x2, y2) ->
-            hypot(x2 - x1, y2 - y1)
-        }.sum()
+        points.zipWithNext { (x1, y1), (x2, y2) -> hypot(x2 - x1, y2 - y1) }.sum()
     }
 
     Column(Modifier.fillMaxSize().padding(16.dp)) {
@@ -95,17 +93,33 @@ fun DisplayParametrizedCurve(xExprText: String, yExprText: String, tMin: Float, 
             val w = size.width
             val h = size.height
 
-            fun mapX(x: Float) = (x - xMin) / (xMax - xMin) * w
-            fun mapY(y: Float) = h - (y - yMin) / (yMax - yMin) * h
+            val dataWidth = xMax - xMin
+            val dataHeight = yMax - yMin
 
-            // Draw X and Y axis lines
-            drawLine(Color.Black, Offset(mapX(0f), 0f), Offset(mapX(0f), h), 2f)
-            drawLine(Color.Black, Offset(0f, mapY(0f)), Offset(w, mapY(0f)), 2f)
+            // Calculate uniform scale for both axes (same pixels per unit for X and Y)
+            val scaleX = w / dataWidth
+            val scaleY = h / dataHeight
+            val scale = minOf(scaleX, scaleY)
 
+            // Calculate offset to center the plot
+            val offsetX = (w - scale * dataWidth) / 2f
+            val offsetY = (h - scale * dataHeight) / 2f
+
+            fun mapX(x: Float) = offsetX + (x - xMin) * scale
+            fun mapY(y: Float) = h - offsetY - (y - yMin) * scale
+
+            // Draw X and Y axes
+            if (0f in xMin..xMax) {
+                val xZero = mapX(0f)
+                drawLine(Color.Black, Offset(xZero, 0f), Offset(xZero, h), 2f)
+            }
+            if (0f in yMin..yMax) {
+                val yZero = mapY(0f)
+                drawLine(Color.Black, Offset(0f, yZero), Offset(w, yZero), 2f)
+            }
+
+            // Draw X-axis ticks and labels
             val xStep = ((xMax - xMin) / 10).coerceAtLeast(0.1f)
-            val yStep = ((yMax - yMin) / 10).coerceAtLeast(0.1f)
-
-            // X-axis ticks and labels
             var xTick = (xMin / xStep).toInt() * xStep
             while (xTick <= xMax) {
                 val px = mapX(xTick)
@@ -123,7 +137,8 @@ fun DisplayParametrizedCurve(xExprText: String, yExprText: String, tMin: Float, 
                 xTick += xStep
             }
 
-            // Y-axis ticks and labels
+            // Draw Y-axis ticks and labels
+            val yStep = ((yMax - yMin) / 10).coerceAtLeast(0.1f)
             var yTick = (yMin / yStep).toInt() * yStep
             while (yTick <= yMax) {
                 val py = mapY(yTick)
@@ -141,7 +156,7 @@ fun DisplayParametrizedCurve(xExprText: String, yExprText: String, tMin: Float, 
                 yTick += yStep
             }
 
-            // Draw curve as polygonal line
+            // Draw the curve
             val path = Path()
             points.firstOrNull()?.let { (x, y) ->
                 path.moveTo(mapX(x), mapY(y))

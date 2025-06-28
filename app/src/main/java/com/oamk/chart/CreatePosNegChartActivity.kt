@@ -64,9 +64,6 @@ fun CreatePosNegChartScreen() {
             label = { Text("Chart Title") }, modifier = Modifier.fillMaxWidth()
         )
 
-        Spacer(Modifier.height(8.dp))
-        Text("X Label Y Value", fontSize = 16.sp)
-
         columns.forEachIndexed { idx, pair ->
             Row(
                 modifier = Modifier.fillMaxWidth(),

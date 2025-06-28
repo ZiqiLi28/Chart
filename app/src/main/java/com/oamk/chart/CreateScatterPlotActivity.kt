@@ -65,9 +65,6 @@ fun CreateScatterPlotScreen() {
             modifier = Modifier.fillMaxWidth()
         )
 
-        Spacer(Modifier.height(8.dp))
-        Text("X Value        Y Value", fontSize = 16.sp)
-
         points.forEachIndexed { idx, pair ->
             Row(
                 modifier = Modifier.fillMaxWidth(),

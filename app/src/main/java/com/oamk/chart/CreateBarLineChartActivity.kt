@@ -73,12 +73,6 @@ fun CreateChartScreen(chartType: String) {
             modifier = Modifier.fillMaxWidth()
         )
 
-        // Display labels for X and Y axis
-        Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
-            Text("X Label", fontSize = 16.sp, modifier = Modifier.weight(1f))
-            Text("Y Label", fontSize = 16.sp, modifier = Modifier.weight(1f))
-        }
-
         // Loop through each column, displaying a pair of X and Y label input fields
         columns.forEachIndexed { index, pair ->
             Row(

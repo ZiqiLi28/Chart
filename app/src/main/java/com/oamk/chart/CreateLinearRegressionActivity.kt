@@ -56,7 +56,7 @@ fun CreateLinearRegressionScreen() {
             .padding(16.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
-        Text("Scatter Plot with Regression Line", fontSize = 20.sp)
+        Text("Line Regression Curve", fontSize = 20.sp)
 
         OutlinedTextField(
             value = title,
@@ -64,9 +64,6 @@ fun CreateLinearRegressionScreen() {
             label = { Text("Chart Title") },
             modifier = Modifier.fillMaxWidth()
         )
-
-        Spacer(Modifier.height(8.dp))
-        Text("X Value        Y Value", fontSize = 16.sp)
 
         points.forEachIndexed { idx, pair ->
             Row(
