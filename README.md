@@ -1,12 +1,18 @@
-# Charts
-• The mobile application itself may require the implementation of some statistical calculation 
+# Function
+• Creat bar chart
 
-• User analytics can be implemented in the application on how the application is used and based on that, data can be collected on the server, which then has the visualization of the analytics 
+• Creat line chart
 
-• Forecasting prospects can be implemented based on the information entered into the application. For example, electricity consumption and based on that, predicting monthly consumption
+• Creat pos-neg bar chart
 
-• The application can study, for example, the correlation of different data and present information to the user
+• Creat scatter plot
 
-• Data collection and analysis for application maintenance/operation. For example, response times, time spent by the user in the application, number of new users on a daily, weekly, monthly basis, etc
+• Linear regression
 
-The libraries used: https://www.patrykandpatrick.com/vico/guide/stable
+• Quadratic regression
+
+• Exponential regression
+
+• Creat Function plotting
+
+• Creat parametrized curve
