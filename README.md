@@ -1,4 +1,6 @@
-# An app for my math teacher's teaching
+# ChartApp
+
+### An app for my math teacher's teaching
 
 Third-party-libraries: **[Vico](https://www.patrykandpatrick.com/vico/guide/stable)** **[mXparser](https://mathparser.org/)**
 
